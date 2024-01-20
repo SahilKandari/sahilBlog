@@ -1,19 +1,21 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import styles from "./writePage.module.css";
-import { useEffect, useState } from "react";
-import "react-quill/dist/quill.bubble.css";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import styles from './writePage.module.css';
+import { useEffect, useState } from 'react';
+import 'react-quill/dist/quill.bubble.css';
+import { useRouter } from 'next/navigation';  // Changed import from "next/navigation"
+import { useSession } from 'next-auth/react';
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from "firebase/storage";
-import { app } from "@/utils/firebase";
-import ReactQuill from "react-quill";
+} from 'firebase/storage';
+import { app } from '@/utils/firebase';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const WritePage = () => {
   const { status } = useSession();
@@ -21,13 +23,14 @@ const WritePage = () => {
 
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
-  const [media, setMedia] = useState("");
-  const [value, setValue] = useState("");
-  const [title, setTitle] = useState("");
-  const [catSlug, setCatSlug] = useState("");
+  const [media, setMedia] = useState('');
+  const [value, setValue] = useState('');
+  const [title, setTitle] = useState('');
+  const [catSlug, setCatSlug] = useState('');
 
   useEffect(() => {
     const storage = getStorage(app);
+
     const upload = () => {
       const name = new Date().getTime() + file.name;
       const storageRef = ref(storage, name);
@@ -35,17 +38,16 @@ const WritePage = () => {
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
-        "state_changed",
+        'state_changed',
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
+            case 'paused':
+              console.log('Upload is paused');
               break;
-            case "running":
-              console.log("Upload is running");
+            case 'running':
+              console.log('Upload is running');
               break;
           }
         },
@@ -61,31 +63,31 @@ const WritePage = () => {
     file && upload();
   }, [file]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <div className={styles.loading}>Loading...</div>;
   }
 
-  if (status === "unauthenticated") {
-    router.push("/");
+  if (status === 'unauthenticated') {
+    router.push('/');
   }
 
   const slugify = (str) =>
     str
       .toLowerCase()
       .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
   const handleSubmit = async () => {
-    const res = await fetch("/api/posts", {
-      method: "POST",
+    const res = await fetch('/api/posts', {
+      method: 'POST',
       body: JSON.stringify({
         title,
         desc: value,
         img: media,
         slug: slugify(title),
-        catSlug: catSlug || "style", //If not selected, choose the general category
+        catSlug: catSlug || 'style',
       }),
     });
 
@@ -121,7 +123,7 @@ const WritePage = () => {
               type="file"
               id="image"
               onChange={(e) => setFile(e.target.files[0])}
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
             <button className={styles.addButton}>
               <label htmlFor="image">
