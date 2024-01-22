@@ -8,7 +8,7 @@ const Footer = () => {
     <div className={styles.container}>
       <div className={styles.info}>
         <div className={styles.logo}>
-          <Image src="/logo.png" alt="lama blog" width={50} height={50} />
+          <Image src="/logo.png" alt="lama blog" sizes="" width={50} height={50} />
           <h1 className={styles.logoText}>Lamablog</h1>
         </div>
         <p className={styles.desc}>
@@ -18,10 +18,10 @@ const Footer = () => {
           repellendus dorales.
         </p>
         <div className={styles.icons}>
-          <Image src="/facebook.png" alt="" width={18} height={18} />
-          <Image src="/instagram.png" alt="" width={18} height={18} />
-          <Image src="/tiktok.png" alt="" width={18} height={18} />
-          <Image src="/youtube.png" alt="" width={18} height={18} />
+          <Image src="/facebook.png" alt="" sizes="" width={18} height={18} />
+          <Image src="/instagram.png" alt="" sizes="" width={18} height={18} />
+          <Image src="/tiktok.png" alt="" sizes="" width={18} height={18} />
+          <Image src="/youtube.png" alt="" sizes="" width={18} height={18} />
         </div>
       </div>
       <div className={styles.links}>
